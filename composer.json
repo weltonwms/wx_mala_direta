@@ -1,0 +1,10 @@
+{
+	"description": "The CodeIgniter framework",
+	"name": "codeigniter/framework",
+	"type": "project",
+	"license": "MIT",
+	
+	"require": {
+		"php": ">=5.3.7"
+	}
+}
