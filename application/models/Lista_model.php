@@ -5,12 +5,12 @@ class Lista_model extends CI_Model
 {
     public function getErrorCsvLista($file)
     {
-        if ($file['error'] != 0) {
+       if ($file['error'] != 0) {
             return "Erro de Upload NR: " . $file['error'];
 
         }
 
-        if ($file['type'] != 'text/csv') {
+        if (UtilHelper::getExtensionFile($file['name']) != 'csv') {
             return "O Arquivo deve ser CSV";
 
         }
@@ -94,15 +94,20 @@ class Lista_model extends CI_Model
 
     }
 
-    public function getCarregamentoLista()
+    public function getCarregamentoLista($status=null)
     {
         $carregamento=$this->getHeadCarregamentoLista();
         if($carregamento){
-            
+            if(is_numeric($status)){
+                $this->db->where('wx_ativo',$status);
+            }
             $listaDados=$this->db->get($carregamento->nome_tabela)->result();
             $lista=[
                 "updated_at" => $carregamento->updated_at,
                 "campos"=>$carregamento->campos,
+                "campo_identificador"=>$carregamento->campo_identificador,
+                "campo_email"=>$carregamento->campo_email,
+                "user_id"=>$carregamento->user_id,
                 "dados" =>$listaDados,
 
             ];

@@ -19,10 +19,13 @@
                     <a class="nav-link" href="<?php echo base_url('modelo') ?>">Modelo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url('malaDireta') ?>">Executar Mala Direta</a>
+                    <a class="nav-link" href="<?php echo base_url('malaDireta') ?>">Mala Direta</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url('pdf') ?>">PDF</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url('email') ?>">Email</a>
                 </li>
 
 

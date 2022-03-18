@@ -3,8 +3,17 @@
 	"name": "codeigniter/framework",
 	"type": "project",
 	"license": "MIT",
+	"hack":"TemplateProcesso|TemplateProcessorCommon|TemplateProcessorOdt|conforme repositories",
+	"repositories": [
+        {
+            "url": "https://github.com/papoteur-mga/PHPWord.git",
+            "type": "git"
+        }
+    	],
 	
 	"require": {
-		"php": ">=5.3.7"
+		"php": ">=5.3.7",
+		"phpoffice/phpword": "^0.17.0",
+		"phpmailer/phpmailer": "^6.6"
 	}
 }

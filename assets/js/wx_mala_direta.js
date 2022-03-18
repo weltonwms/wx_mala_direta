@@ -6,6 +6,10 @@
 function checkAndUncheck() {
     var checkAll = document.querySelector('.checkAll');
     var checks = document.querySelectorAll('.check');
+    if(!checkAll){
+        return false;
+    }
+    
     checkAll.addEventListener('click', function(e) {
         var target = e.currentTarget;
 
