@@ -1,4 +1,5 @@
-<h4 class="mt-2">MODELO <small class="text-muted">- Documento que servirá de base para criar outros documentos</small></h4>
+<h4 class="mt-2">MODELO <small class="text-muted">- Documento que servirá de base para criar outros documentos</small>
+</h4>
 
 <form action="<?php echo base_url('modelo/loadModelo') ?>" method="post" enctype="multipart/form-data">
     <div class="row">
@@ -33,9 +34,9 @@
                         <li>
                             Utilize marcações no documento do tipo: ${campo}, sendo campo o nome da coluna desejada.
                             <small class="text-muted">Ex: ${nome_completo}. </small>
-                    
+
                         </li>
-                       
+
                     </ul>
                 </div>
             </div>
@@ -44,14 +45,19 @@
 
     <br>
     <p class="mt-2 text-center bg-secondary bg-gradient text-white p-3" style="font-size:18px">
-    Utilize marcações no documento do tipo: <strong>${campo}</strong>, 
+        Utilize marcações no documento do tipo: <strong>${campo}</strong>,
         sendo campo o nome da coluna desejada.
     </p>
 
     <?php if($carregamentoModelo):?>
     <div class="border border-light border-3 mt-3 p-2 bg-light.bg-gradient">
         <p><strong>Último Carregamento: </strong><?php echo UtilHelper::dateBr($carregamentoModelo->updated_at); ?></p>
-        <p><strong>Tipo Arquivo: </strong><?php echo $carregamentoModelo->filename; ?></p>
+        <p>
+            <strong>Tipo Arquivo: </strong>
+            <a href="<?php echo base_url('modelo/download/'. $carregamentoModelo->filename)?>">
+                <?php echo $carregamentoModelo->filename; ?>
+            </a>
+        </p>
     </div>
     <?php endif;?>
 

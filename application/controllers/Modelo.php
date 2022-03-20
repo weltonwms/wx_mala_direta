@@ -21,11 +21,8 @@ class Modelo extends BaseController
     public function loadModelo()
     {
         //path= uploads/user{user_id}_{secret_user}/modelo/modelo.docx|odt
-        
-		$user_id=1;
-		$secret_user="1b7b5358";
-
-		$path="./uploads/user{$user_id}_{$secret_user}/modelo";
+        $user_id=1;
+        $path= $this->Modelo_model->getPathModelo();
 		$this->do_upload($path, $user_id);
         redirect('modelo');
        
@@ -75,10 +72,12 @@ class Modelo extends BaseController
 
     public function download($link)
     {
+        $path=$this->Modelo_model->getPathModelo();
+        $fullPath=$path.$link;
 		header('Content-Description: File Transfer');
         header('application/octet-stream');
 		header('Content-Disposition: attachment; filename="'.$link.'"');
-        readfile('./uploads/'.$link);
+        readfile($fullPath);
 
     }
 

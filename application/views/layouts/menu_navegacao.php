@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url('email') ?>">Email</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url('configuracao') ?>">Configurações</a>
+                </li>
 
 
 

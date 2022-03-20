@@ -30,6 +30,14 @@ class Modelo_model extends CI_Model
         return $carregamento;
     }
 
+    public function getPathModelo()
+    {
+        $user_id=1;
+        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
+        $pathMalaDireta="./uploads/user{$user_id}_{$secret_user}/modelo/";
+        return $pathMalaDireta;
+    }
+
     
    
 

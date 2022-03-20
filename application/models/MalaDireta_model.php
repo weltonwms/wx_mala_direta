@@ -61,6 +61,9 @@ class MalaDireta_model extends CI_Model
     public function getFilesFromMalaDireta()
     {
         $pathMalaDireta=$this->getPathMalaDireta();
+        if (!file_exists($pathMalaDireta)) {
+            return [];
+        }
         $myfiles = array_diff(scandir($pathMalaDireta), array('.', '..'));
         return array_values($myfiles);
     }
