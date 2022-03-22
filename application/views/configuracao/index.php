@@ -102,7 +102,8 @@ $campo_email=isset($head_lista->campo_email)?$head_lista->campo_email:'';
                     </div>
                 </div>
                 <div class="row mb-2">
-                            <div class="msg_mail_teste"></div>
+
+                    <div class="msg_mail_teste"></div>
                 </div>
 
                 <div class="row mb-2 mt-4">
@@ -120,40 +121,57 @@ $campo_email=isset($head_lista->campo_email)?$head_lista->campo_email:'';
     </div>
 
 </form>
+
+
+
 <script>
 var btn_send_mail_test = document.querySelector('#btn_send_mail_test');
+var div_msg = document.querySelector('.msg_mail_teste');
 btn_send_mail_test.addEventListener('click', function() {
     var blocoPassword = document.querySelector(".blocoPassword");
     blocoPassword.style.display = "flex";
-    var fieldsNotAssign=fieldsNotAssignToSendMail();
+    var fieldsNotAssign = fieldsNotAssignToSendMail();
     console.log(fieldsNotAssign)
-    if(fieldsNotAssign.length > 0){
-        var msg="<p>Preencha os Campos</p>";
-        msg+='<ul>';
-        fieldsNotAssign.forEach(function(field){
-            msg+="<li>"+field+'</li>';
+    if (fieldsNotAssign.length > 0) {
+        var msg =
+            "<div class='alert alert-info'><div>Preencha os campos abaixo para poder clicar em Enviar</div>";
+        msg += '<ul>';
+        fieldsNotAssign.forEach(function(field) {
+            msg += "<li>" + field + '</li>';
         });
-        msg+='</ul>';
-        var div_msg=document.querySelector('.msg_mail_teste');
-        div_msg.innerHTML=msg;
+        msg += '</ul></div>';
+
+        div_msg.innerHTML = msg;
         return false;
     }
     var fieldsToSendMail = getFieldsToSendMail();
-    ajaxRequest(
-        {
-            url:"configuracao/ajaxTesteMail",
-            data:fieldsToSendMail,
-            method:'GET',
-            success:function(resp){
-                console.log(resp);
-            },
-            error:function(xhr){
-                console.log('deu ruim');
-            }
+    ajaxRequest({
+        url: "email/ajaxTeste",
+        data: fieldsToSendMail,
+        success: function(resp) {
+            var msg='<div class="alert alert-success">'+
+                    resp.message+
+                    '</div>';
+            console.log(resp);
+            div_msg.innerHTML = msg;
+        },
+        error: function(resp) {
+            var msg='<div class="alert alert-danger">'+
+                        resp.message+
+                    '</div>';
+                    console.log(resp);
+                    div_msg.innerHTML = msg;
+        },
+        beforeSend: function() {
+            var msg =
+                '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">' +
+                '<span class="visually-hidden">Loading...</span>' +
+                '</div>';
+                div_msg.innerHTML = msg;   
         }
-    )
+    })
 
-   
+
 });
 
 function fieldsNotAssignToSendMail() {

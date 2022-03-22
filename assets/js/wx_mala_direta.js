@@ -62,39 +62,51 @@ function checkAndUncheck() {
 //***************************************************/
 //fim checkAndUncheck()
 
+/*
+ **********************************************
+ *Inicio ajaxRequest 
+ */
 function ajaxRequest(metaRequest) {
     var meta = {
         'url': '',
         'method': 'POST',
-        'data': {'um':'asd'},
+        'data': {},
         'success': function () { },
-        'error': function () { }
+        'error': function () { },
+        'beforeSend':function (){},
+        'complete': function (){}
 
     };
 
     var metax = Object.assign(meta, metaRequest);
-    var post = JSON.stringify(metax.data)
-
-    var url = metax.url
     var xhr = new XMLHttpRequest()
 
-    xhr.open(metax.method, url, true)
-    xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
-    console.log(' metax ', metax)
-    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    //xhr.send("fname=Henry&lname=Ford");
-    xhr.send(post);
-
+    xhr.open(metax.method, metax.url, true)
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
+    xhr.send(convertObjToFormData(metax.data));
+    metax.beforeSend();
     xhr.onload = function () {
+        metax.complete();
         if (xhr.status >= 200 && xhr.status < 400)
         {
-            //console.log(xhr);
-            metax.success(JSON.parse(xhr.response));
+          metax.success(JSON.parse(xhr.response));
         }
         if (xhr.status > 399)
         {
-            metax.error(xhr);
+            metax.error(JSON.parse(xhr.response));
         }
     }
 
+    function convertObjToFormData(obj) {
+        if (obj)
+        {
+            var str = new URLSearchParams(Object.entries(obj)).toString();
+            return str;
+        }
+        return null;
+    }
+
 }
+//***************************************************/
+//fim ajaxRequest()
