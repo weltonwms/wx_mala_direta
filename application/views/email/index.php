@@ -30,6 +30,11 @@
         </div>
     </div>
 </div>
+<div class="message_global">
+    
+
+</div>
+
 <br><br>
 <?php if($configsAusentes):?>
 <div class="alert alert-danger">
@@ -50,43 +55,41 @@
 
 <?php else:?>
 
-<form>
+<form method="POST" id="form_disparo" action="<?php echo base_url("email/disparar");?>" enctype="multipart/form-data">
 
     <div class="row mb-2">
         <div class="col">
             <div class="">
-                <label for="" class="form-label">Email Remetente</label>
-                <input type="email" class="form-control form-control-sm" id=""
-                value="<?php echo $config->email_from?>"
-                   readonly="readonly">
+                <label class="form-label">Email Remetente</label>
+                <input type="email" class="form-control form-control-sm" value="<?php echo $config->email_from?>"
+                    readonly="readonly">
 
             </div>
         </div>
         <div class="col">
             <div class="">
-                <label for="" class="form-label">Senha Email</label>
-                <input type="password" class="form-control form-control-sm" id="exampleInputPassword1">
+                <label for="email_password" class="form-label">Senha Email</label>
+                <input type="password" name="email_password" class="form-control form-control-sm" id="email_password">
             </div>
         </div>
         <div class="col">
             <div class="">
-                <label for="" class="form-label">Nome Remetente</label>
-                <input type="text" class="form-control form-control-sm" id=""
-                value="<?php echo $config->email_from_name?>"
-                readonly="readonly">
+                <label class="form-label">Nome Remetente</label>
+                <input type="text" class="form-control form-control-sm" value="<?php echo $config->email_from_name?>"
+                    readonly="readonly">
             </div>
         </div>
     </div>
     <div class="mb-2">
-        <label for="" class="form-label">Assunto</label>
-        <input type="text" class="form-control form-control-sm" id="">
+        <label for="assunto" class="form-label">Assunto</label>
+        <input type="text" name="assunto" class="form-control form-control-sm" id="assunto">
     </div>
 
     <div class="row mb-2">
         <div class="col-md-4">
             <div class="">
-                <label for="" class="form-label">Anexos</label>
-                <select class="form-select" multiple aria-label="multiple select example">
+                <label class="form-label">Anexos</label>
+                <select class="form-select" name="tipos_anexo[]" multiple>
 
                     <option value="1">Doc Gerado Mala direta</option>
                     <option value="2">Doc Gerado PDF</option>
@@ -95,8 +98,9 @@
             </div>
         </div>
         <div class="col-md-8">
-            <label for="formFileSm" class="form-label">Small file input example</label>
-            <input class="form-control form-control-sm" id="formFileSm" type="file" multiple>
+            <label for="upload_now_file" class="form-label">Small file input example</label>
+            <input name="upload_now_file[]" class="form-control form-control-sm" id="upload_now_file" type="file"
+                multiple>
         </div>
     </div>
 
@@ -104,13 +108,43 @@
 
 
     <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Corpo do Email</label>
-        <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <label for="corpo" class="form-label">Corpo do Email</label>
+        <textarea class="form-control form-control-sm" name="corpo" id="corpo" rows="3"></textarea>
         <div id="" class="form-text">Pode-se Usar Marcações HTML.</div>
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Executar Envio</button>
+        <button type="submit" class="btn btn-primary" id="executar_envio">Executar Envio</button>
     </div>
 
 </form>
 <?php endif;?>
+
+<script>
+var btn_execute = document.querySelector("#executar_envio");
+//var form_disparo=document.querySelector("#form_disparo")
+//console.log(btn_execute);
+btn_execute.addEventListener('click', function(event) {
+    event.preventDefault();
+    ajaxSendForm({
+        url: 'email/ajaxDisparo',
+        form: '#form_disparo',
+        success: function(resp){
+            var resposta=JSON.parse(resp); 
+            console.log(resposta);
+            executeAll(resposta);
+        },
+        error: function(resp) {
+            var resposta=JSON.parse(resp);
+            showAlert(resposta.message,'.message_global','danger');
+            
+        }
+    });
+   
+});
+
+function executeAll(serverResposta){
+    var countLista=serverResposta.lista.length
+    console.log("Total De Requests a fazer",  countLista)
+
+}
+</script>

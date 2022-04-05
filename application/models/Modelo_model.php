@@ -27,6 +27,9 @@ class Modelo_model extends CI_Model
         $user_id=1;
         $this->db->where('user_id',$user_id);
         $carregamento=$this->db->get('carregamentos_modelo')->row();
+        if($carregamento):
+            $carregamento->ext=UtilHelper::getExtensionFile($carregamento->filename);
+        endif;
         return $carregamento;
     }
 

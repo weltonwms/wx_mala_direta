@@ -12,8 +12,12 @@ class Configuracao extends BaseController {
 	
 	public function index()
 	{
-		$dados=$this->Configuracao_model->getConfiguracoes();
-		//echo "<pre>"; print_r($dados); exit();
+		$this->load->model('Lista_model');
+		$dados=[
+			"config"=>$this->Configuracao_model->getConfiguracoes(),
+			"head_lista"=>$this->Lista_model->getHeadCarregamentoLista()
+		];
+
 		$this->renderView('configuracao/index',$dados);
 	}
 

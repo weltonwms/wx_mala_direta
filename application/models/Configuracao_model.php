@@ -33,11 +33,10 @@ class Configuracao_model extends CI_Model
         $user_id=1;
         $this->db->where('user_id',$user_id);
         $configuracoes=$this->db->get('configuracoes')->row();
-        //echo "<pre>";print_r($configuracoes); exit();
-        $this->load->model('Lista_model');
-        $head=$this->Lista_model->getHeadCarregamentoLista();
-        return ["config"=>$configuracoes,"head_lista"=>$head];
+        return $configuracoes;
     }
+
+
 
    
 

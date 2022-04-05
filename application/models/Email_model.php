@@ -44,4 +44,54 @@ class Email_model extends CI_Model
 
     }
 
+    public function enviar($dados)
+    {
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->SMTPDebug = 0; //Enable verbose debug output
+        $mail->isSMTP(); //Send using SMTP
+        $mail->Host = $dados['smtp_host']; //Set the SMTP server to send through
+        $mail->SMTPAuth = true; //Enable SMTP authentication
+        $mail->Username = $dados['email_from']; //SMTP username
+        $mail->Password = $dados['email_password']; //SMTP password
+        $mail->SMTPSecure = ''; //Enable implicit TLS encryption
+        $mail->Port = $dados['smtp_port']; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ),
+        );
+        //$mail->Timeout       =   8;
+        $mail->CharSet = 'UTF-8';
+        //Recipients
+        $mail->setFrom($dados['email_from'], $dados['email_from_name']);
+        $mail->addAddress($dados['email_to']); //Add a recipient
+        $anexos=isset($dados['anexos'])?$dados['anexos']:[];
+        foreach($anexos as $anexo){
+             $mail->addAttachment($anexo->filePath, $anexo->fileName);  
+        }
+       
+
+        //Content
+        $mail->isHTML(true); //Set email format to HTML
+        $mail->Subject = $dados['assunto'];
+        $mail->Body = $dados['corpo'];
+        $mail->AltBody = $dados['corpo']; //tirar tags HTML
+
+        $mail->send();
+        return true;
+    }
+
+    public function getPathUser()
+    {
+        $user_id=1;
+        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
+        $pathUser="./uploads/user{$user_id}_{$secret_user}/";
+        return $pathUser;
+    }
+
 }

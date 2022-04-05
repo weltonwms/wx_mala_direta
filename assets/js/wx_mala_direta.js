@@ -73,8 +73,8 @@ function ajaxRequest(metaRequest) {
         'data': {},
         'success': function () { },
         'error': function () { },
-        'beforeSend':function (){},
-        'complete': function (){}
+        'beforeSend': function () { },
+        'complete': function () { }
 
     };
 
@@ -83,14 +83,14 @@ function ajaxRequest(metaRequest) {
 
     xhr.open(metax.method, metax.url, true)
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    
+
     xhr.send(convertObjToFormData(metax.data));
     metax.beforeSend();
     xhr.onload = function () {
         metax.complete();
         if (xhr.status >= 200 && xhr.status < 400)
         {
-          metax.success(JSON.parse(xhr.response));
+            metax.success(JSON.parse(xhr.response));
         }
         if (xhr.status > 399)
         {
@@ -110,3 +110,65 @@ function ajaxRequest(metaRequest) {
 }
 //***************************************************/
 //fim ajaxRequest()
+
+function ajaxSendForm(metaRequest) {
+    var meta = {
+        'url': '',
+        'method': 'POST',
+        'form': 'form',
+        'success': function () { },
+        'error': function () { },
+        'beforeSend': function () { },
+        'complete': function () { }
+
+    };
+    var metax = Object.assign(meta, metaRequest);
+    var xhr = new XMLHttpRequest()
+
+    var form = document.querySelector(metax.form);
+    var formData = new FormData();
+    if (form instanceof HTMLFormElement)
+    {
+        formData = new FormData(form);
+    }
+    // Bind the FormData object and the form element
+
+
+    // Define what happens on successful data submission
+    xhr.addEventListener("load", function (event) {
+        metax.complete();
+        if (xhr.status >= 200 && xhr.status < 400)
+        {
+            metax.success(xhr.response);
+        }
+        if (xhr.status > 399)
+        {
+            metax.error(xhr.response);
+        }
+
+    });
+
+    // Define what happens in case of error
+    xhr.addEventListener("error", function (event) {
+        metax.error("Erro ao Realizar Request");
+        console.log('Oops! Something went wrong.');
+    });
+
+    // Set up our request
+    xhr.open(metax.method, metax.url);
+    metax.beforeSend();
+    // Send our FormData object; HTTP headers are set automatically
+    xhr.send(formData);
+}
+
+
+function showAlert(text, target, type = "success") {
+    var divAlert = '<div class="alert alert-'+type+' alert-dismissible fade show" role="alert">';
+    divAlert += text;
+    divAlert += '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    divAlert += '</div>';
+    
+    var domTarget = document.querySelector(target);
+    domTarget.innerHTML = divAlert;
+   //setTimeout(function(){domTarget.innerHTML=""},4000);
+}
