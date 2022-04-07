@@ -87,7 +87,7 @@ function ajaxRequest(metaRequest) {
     xhr.send(convertObjToFormData(metax.data));
     metax.beforeSend();
     xhr.onload = function () {
-        metax.complete();
+       
         if (xhr.status >= 200 && xhr.status < 400)
         {
             metax.success(JSON.parse(xhr.response));
@@ -96,6 +96,7 @@ function ajaxRequest(metaRequest) {
         {
             metax.error(JSON.parse(xhr.response));
         }
+        metax.complete();
     }
 
     function convertObjToFormData(obj) {
@@ -136,7 +137,7 @@ function ajaxSendForm(metaRequest) {
 
     // Define what happens on successful data submission
     xhr.addEventListener("load", function (event) {
-        metax.complete();
+       
         if (xhr.status >= 200 && xhr.status < 400)
         {
             metax.success(xhr.response);
@@ -145,7 +146,7 @@ function ajaxSendForm(metaRequest) {
         {
             metax.error(xhr.response);
         }
-
+        metax.complete();
     });
 
     // Define what happens in case of error

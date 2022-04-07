@@ -11,6 +11,7 @@ class Email extends BaseController
         $this->load->model("Configuracao_model");
         $this->load->model('Lista_model');
         $this->load->model('Modelo_model');
+        $this->load->model('MalaDireta_model');
     }
 
     public function index()
@@ -51,13 +52,11 @@ class Email extends BaseController
 
     public function ajaxTeste()
     {
-
         header('Content-Type: application/json; charset=utf-8');
         try {
             $post = $this->input->post();
             $this->Email_model->teste($post);
             echo json_encode(["message" => "Email de Teste enviado com Sucesso"]);
-
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => $e->getMessage()]);
@@ -83,7 +82,6 @@ class Email extends BaseController
         //echo "<pre>"; print_r($dados); exit();
         // echo "<pre>";
         foreach ($carregamentoLista['dados'] as $dado) {
-
             try {
                 $dados['email_to'] = $dado->$campo_email;
                 $filename = $dado->$campo_identificador;
@@ -100,22 +98,26 @@ class Email extends BaseController
         exit('<br>acabou');
         //echo "<pre>"; print_r($carregamentoLista); exit();
     }
-
-    private function getAnexos($tipos_anexo, $filename, $upload_now_file)
+    /**
+     * @param array $tipos_anexo tipos de anexos desejados: 1, 2 ou 3
+     * @param string $filename nome do arquivo desejado sem a extensão (geralmente é o campo identificador)
+     * @param string $extModelo nome da extensão do arquivo utilizado pelo modelo
+     * @param array $upload_now_file lista com os uploads realizados temporariamente para o tipo de anexo 3 (upload_now_file)
+     */
+    private function getAnexos($tipos_anexo, $filename, $extModelo, $upload_now_file)
     {
-
         $lista = [];
-        // print_r($tipos_anexo);
-
+        //Se não tiver algum tipo de anexo então não tem motivo para prosseguir
+        if (!is_array($tipos_anexo) || !$tipos_anexo) {
+            return [];
+        }
+        
         if (in_array(1, $tipos_anexo)) {
             //docx ou odt
-
-            $this->load->model('MalaDireta_model');
             $pathMalaDireta = $this->MalaDireta_model->getPathMalaDireta();
-            $ext = "docx"; //puxar do modelo
             $obj = new \stdClass();
-            $obj->filePath = $pathMalaDireta . $filename . "." . $ext;
-            $obj->fileName = $filename . "." . $ext;
+            $obj->filePath = $pathMalaDireta . $filename . "." . $extModelo;
+            $obj->fileName = $filename . "." . $extModelo;
 
             $lista[] = $obj;
         }
@@ -125,49 +127,48 @@ class Email extends BaseController
         }
 
         if (in_array(3, $tipos_anexo)) {
-            foreach ($anexos['tmp_name'] as $key => $tmp_name) {
+            //upload_now_file uploads realizados no momento do disparo de emails
+            $pathUser = $this->Email_model->getPathUser();
+            $pathTmp = $pathUser."tmp/";
+            foreach ($upload_now_file as $name) {
                 $obj = new \stdClass();
-                $obj->filePath = $tmp_name;
-                $obj->fileName = $anexos['name'][$key];
+                $obj->filePath = $pathTmp . $name;
+                $obj->fileName =$name;
                 $lista[] = $obj;
             }
         }
 
         return $lista;
-
     }
 
     public function ajaxDisparo()
     {
-        //validar informações
-
+        //capturar informações necessárias
         $carregamentoLista = $this->Lista_model->getCarregamentoLista(1);
         $post = $this->input->post();
         $config = $this->Configuracao_model->getConfiguracoes();
-        $dados = array_merge((array) $config, $post, (array) $carregamentoLista);
-        $erro = $this->getError($dados, $carregamentoLista);
-        // echo "<pre>"; print_r($dados); exit();
-        
-
+        $dados = array_merge((array) $config, $post, (array) $carregamentoLista); //juntando tudo em $dados
+        //validar informações
+        $erro = $this->getError($dados);
+       
         if ($erro) {
             header('Content-Type: application/json; charset=utf-8');
             http_response_code(400);
             echo json_encode(["message" => $erro]);
             exit();
-
         }
         $infoUpload = '';
         if (isset($dados['tipos_anexo']) && in_array(3, $dados['tipos_anexo'])) {
-            $infoUpload = $this->uploadNowFile();
-            //print_r($infoUpload);
+            $infoUpload = $this->uploadNowFile(); //$infoUpload é objeto que possui atributo error e files updados (caminhos) temporariamente
             if ($infoUpload->error) {
                 header('Content-Type: application/json; charset=utf-8');
                 http_response_code(400);
                 echo json_encode(["message" => $infoUpload->error]);
+                //bloquear processamento aqui se houver erro no upload_file_now
                 exit();
             }
         }
-
+        //Iniciar processamento de resposta para solicitação bem sucedida
         $carregamentoModelo = $this->Modelo_model->getCarregamentoModelo();
         $resposta = [
             'smtp_host' => $dados['smtp_host'],
@@ -184,10 +185,10 @@ class Email extends BaseController
             "ext" => $carregamentoModelo->ext,
 
         ];
-
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($resposta);
         exit();
+        //fim do processamento bem sucedido
     }
 
     private function getError($dados)
@@ -212,24 +213,24 @@ class Email extends BaseController
         }
 
         if (isset($dados['tipos_anexo']) && in_array(3, $dados['tipos_anexo'])) {
-            //print_r($_FILES['upload_now_file']['tmp_name']);
+            //Necessita ter acesso a variável global $_FILES, para validar o que os files que estão vindo de um formulário cliente
             if (!$_FILES['upload_now_file']['tmp_name'][0]) {
                 return 'Upload Agora sem nenhum arquivo anexado';
             }
-
         }
+
         return false;
     }
+    
 
     private function uploadNowFile()
     {
         $pathUser = $this->Email_model->getPathUser();
         $path = $pathUser . "tmp/";
+        //criando diretório temporário para realizar upload dos arquivos
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
-
-        //$this->clearUpdateNowFile($path,['IMG-3383.jpg','documentoTokioMarine.pdf',' merge_diploma.png']);exit();
         $info = new \stdClass();
         $info->error = "";
         $info->files = [];
@@ -261,7 +262,6 @@ class Email extends BaseController
 
             $infoData = $this->upload->data();
             $info->files[] = $infoData['file_name'];
-
         }
 
         return $info;
@@ -272,6 +272,85 @@ class Email extends BaseController
         foreach ($files as $file) {
             @unlink($path . $file);
         }
+    }
+
+    public function ajaxSendMail()
+    {
+        //sleep(5);
+        $dados=$this->input->post();
+        $item=json_decode($dados['item']);
+        unset($dados['item']);//manter $dados limpos apenas com configs
+        $tipos_anexo= isset($dados['tipos_anexo'])?json_decode($dados['tipos_anexo']):[];
+        $upload_now_file= isset($dados['upload_now_file'])?json_decode($dados['upload_now_file']):[];
+       
+        try {
+            //capturando informações adicionais para enviar email
+            $campo_email=$dados['campo_email'];
+            $campo_identificador=$dados['campo_identificador'];
+            $dados['email_to']=$item->$campo_email;
+            $filename=$item->$campo_identificador;
+            $dados['anexos']=$this->getAnexos($tipos_anexo, $filename, $dados['ext'], $upload_now_file);
+            //disparo de email para um item de uma lista. Passar todas informações necessárias como configs smtp, destinatário, anexos, etc
+            //No caso as informações estão vindas de um POST do cliente, mas poderia pegar essas informações do banco de dados. Optou-se por tentar diminiur
+            //acessos a bancos de dados para reduzir o tempo de resposta.
+            $this->Email_model->enviar($dados);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(["message" => "Envio com sucesso para o email: " . $dados['email_to'] ]);
+            exit();
+        } catch (\Exception $e) {
+            header('Content-Type: application/json; charset=utf-8');
+            http_response_code(500);
+            echo json_encode(["message" => "Erro ao tentar enviar para o email: " . $dados['email_to'], "error" => $e->getMessage() ]);
+            exit();
+        }
+
+        //fim processamento
+    }
+
+    public function ajaxSaveLogSendMail()
+    {
+        $post=$this->input->post();
+        if(!isset($post['metaInfo']) || !$post['metaInfo']):
+            header('Content-Type: application/json; charset=utf-8');
+            http_response_code(400);
+            echo json_encode(["message" => "MetaInfo não Informado" ]);
+            exit();
+        endif;
+        $metaInfo=json_decode($post['metaInfo']);
+        $dados=[
+            "assunto"=>$metaInfo->assunto,
+            "corpo"=>$metaInfo->corpo,
+            "registros_enviados"=>$post['registros_enviados'],
+            "registros_nao_enviados"=>$post['registros_nao_enviados'],
+        ];
+        $retorno=$this->Email_model->saveLogSendMail($dados);
+        if($retorno):
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(["message" => "Log Gravado com Sucesso" ]);
+            exit();
+        endif;
+
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code(500);
+        echo json_encode(["message" => "Erro ao Gravar Log" ]);
+        exit();
+    }
+
+    public function clearTmpFiles()
+    {
+        $upload_now_file=json_decode($this->input->post('upload_now_file'));
+        $filesTmp= is_array($upload_now_file)?$upload_now_file:[];
+        $retorno=$this->Email_model->clearTmpFiles($filesTmp);
+        if($retorno):
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(["message" =>"Arquivos Temporários Limpos","files"=>$filesTmp ]);
+            exit();
+        endif;
+
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code(500);
+        echo json_encode(["message" => "Erro ao limpar arquivos temporários" ]);
+        exit();
 
     }
 

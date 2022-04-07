@@ -70,7 +70,7 @@ class Email_model extends CI_Model
         //Recipients
         $mail->setFrom($dados['email_from'], $dados['email_from_name']);
         $mail->addAddress($dados['email_to']); //Add a recipient
-        $anexos=isset($dados['anexos'])?$dados['anexos']:[];
+        $anexos=(isset($dados['anexos']) && is_array($dados['anexos']) )?$dados['anexos']:[];
         foreach($anexos as $anexo){
              $mail->addAttachment($anexo->filePath, $anexo->fileName);  
         }
@@ -92,6 +92,38 @@ class Email_model extends CI_Model
         $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
         $pathUser="./uploads/user{$user_id}_{$secret_user}/";
         return $pathUser;
+    }
+
+    public function saveLogSendMail($dados)
+    {
+        $user_id=1;
+        $this->db->where('user_id', $user_id);
+        $registro = $this->db->get('emails_enviados')->row();
+        //TO DO :sanitizar entrada $dados;
+        $dados['updated_at']=date('Y-m-d H:i:s');
+        $dados['user_id']=$user_id;
+       
+
+        if ($registro) {
+            $this->db->where('user_id', $user_id);
+            return $this->db->update('emails_enviados', $dados);
+        } else {
+            return $this->db->insert('emails_enviados', $dados);
+        }
+
+    }
+
+    public function clearTmpFiles(array $filesTmp)
+    {
+        $pathUser = $this->getPathUser();
+        $pathTmp = $pathUser."tmp/";
+        foreach ($filesTmp as $file) {
+            $fileFullPath= $pathTmp . $file;
+            if (file_exists($fileFullPath)) {
+               @unlink($fileFullPath);
+            }
+        }
+        return true;
     }
 
 }
