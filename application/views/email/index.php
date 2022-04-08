@@ -89,7 +89,7 @@
         <div class="col-md-4">
             <div class="">
                 <label class="form-label">Anexos</label>
-                <select class="form-select" name="tipos_anexo[]" multiple>
+                <select class="form-select" name="tipos_anexo[]" id="tipos_anexo" multiple>
 
                     <option value="1">Doc Gerado Mala direta</option>
                     <option value="2">Doc Gerado PDF</option>
@@ -97,8 +97,8 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-8">
-            <label for="upload_now_file" class="form-label">Small file input example</label>
+        <div class="col-md-8 arquivos_upload_now" style="display:none">
+            <label for="upload_now_file" class="form-label">Arquivos Upload Agora</label>
             <input name="upload_now_file[]" class="form-control form-control-sm" id="upload_now_file" type="file"
                 multiple>
         </div>
@@ -148,7 +148,7 @@ function Control() {
         var text = "<div class='alert alert-info'>" + this.total + " Requisições Completadas</div>";
         var loading = document.querySelector("#loading");
         loading.innerHTML = text;
-
+        desbloquear_executar_envio();
     }
     this.init = function(total) {
         this.total = total;
@@ -167,6 +167,7 @@ function Control() {
         //limpar também mensagens globais anteriores.
         var message_global = document.querySelector(".message_global");
         message_global.innerHTML=" ";
+        bloquear_executar_envio();
     }
     this.add = function() {
         this.contador++;
@@ -193,8 +194,15 @@ function Control() {
 
 var controlRequests = new Control();
 var btn_execute = document.querySelector("#executar_envio");
-//var form_disparo=document.querySelector("#form_disparo")
-//console.log(btn_execute);
+
+function bloquear_executar_envio(){
+    btn_execute.disabled=true;
+}
+
+function desbloquear_executar_envio(){
+    btn_execute.disabled=false;
+}
+
 btn_execute.addEventListener('click', function(event) {
     event.preventDefault();
     ajaxSendForm({
@@ -334,5 +342,20 @@ function clearTmpFiles(metaInfo){
             error: console.log
         });
 }
+
+var arquivos_upload_now=document.querySelector(".arquivos_upload_now");
+var tipos_anexo=document.querySelector("#tipos_anexo");
+
+tipos_anexo.addEventListener("change",function(e){
+    var alvo=e.currentTarget; //select tipos_anexo
+    var values= getSelectValues(alvo);
+    if(values.indexOf("3") !==-1){ 
+        arquivos_upload_now.style.display="block";
+    }
+    else{
+        arquivos_upload_now.style.display="none";
+    }
+    
+})
 
 </script>
