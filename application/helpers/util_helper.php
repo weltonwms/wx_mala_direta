@@ -11,7 +11,7 @@ class UtilHelper
         return $array;
     }
 
-    public function convertCsvToJson($fileCsv)
+    public static function convertCsvToJson($fileCsv)
     {
         $array = array_map('str_getcsv', file($fileCsv));
         array_walk($array, function (&$a) use ($array) {
@@ -73,4 +73,16 @@ class UtilHelper
         }
         return $status;
     }
+
+    /**
+     * Escapar textos com HTML para texto puro.
+     */
+    public static function plainText($htmlText)
+    {
+        $text = strip_tags($htmlText, '<br><p><li>');
+        $text = preg_replace ('/<[^>]*>/', PHP_EOL, $text);
+    
+        return $text;
+    }
+
 }
