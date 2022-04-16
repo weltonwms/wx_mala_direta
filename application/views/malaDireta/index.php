@@ -69,19 +69,6 @@
 <?php endif;?>
 
 
-<style>
-.box_files {
-    background-color: #fff;
-    font-size: 12px;
-}
-
-.row_file {
-    padding: 5px;
-    border-top: 1px solid hsla(210, 18%, 87%, 1);
-}
-</style>
-
-
 <script>
 checkAndUncheck(); //função para selecionar todos os registros e deselecionar
 </script>

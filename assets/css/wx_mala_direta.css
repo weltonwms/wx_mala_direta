@@ -10,3 +10,13 @@ legend.legend_destaque{
     border-bottom: 1px solid #ddd;
     margin-bottom: 25px;
 }
+
+.box_files {
+    background-color: #fff;
+    font-size: 12px;
+}
+
+.row_file {
+    padding: 5px;
+    border-top: 1px solid hsla(210, 18%, 87%, 1);
+}

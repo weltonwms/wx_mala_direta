@@ -70,16 +70,20 @@ class LibreConverter{
     public function convertAll()
     {
        //parâmetros necessários: Diretório de entrada, de saída e extensão do arquivo a converter
-
-        $cmd=$this->makeCommand($this->inputDirectory."/*.".$this->inputExtension,$this->outputDirectory);
+        $sourceFile=escapeshellarg($this->inputDirectory)."/*.".$this->inputExtension;
+        $cmd=$this->makeCommand($sourceFile,$this->outputDirectory,false);
         $retorno=$this->exec($cmd);
         return $retorno;
     }
 
-    public function makeCommand($sourceFile, $outputDirectory)
+    public function makeCommand($sourceFile, $outputDirectory,$escapeSource=true)
     {
-        $sourceFile = escapeshellarg($sourceFile);
+        if (!is_writable($outputDirectory)) {
+            throw new \Exception('Destino sem permissão de escrita');
+        }
+        $sourceFile = $escapeSource?escapeshellarg($sourceFile):$sourceFile;
         $outputDirectory = escapeshellarg($outputDirectory);
+       
 
         return "{$this->bin} --headless --convert-to pdf {$sourceFile} --outdir {$outputDirectory}";
     }
@@ -91,11 +95,13 @@ class LibreConverter{
            //coisas como cache, config do usuário,etc.
             $home = getenv('HOME');
             $is_windows=stristr(PHP_OS, 'WIN')?true:false;
+            $DS=DIRECTORY_SEPARATOR ;
             if (!is_writable($home)) {
                 $cmdExport=$is_windows?"SET":"export"; //No Windows não tem comando 'export' e sim 'SET'
-                $cmd = "$cmdExport HOME=/tmp && ".$cmd;
+                $cmd = "$cmdExport HOME={$DS}tmp && ".$cmd;
             }
         }
+        //echo $cmd ; exit();
         $process = proc_open($cmd, [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
 
         if (false === $process) {
