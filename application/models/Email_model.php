@@ -46,6 +46,10 @@ class Email_model extends CI_Model
         $mail->addAddress($dados['email_to']); //Add a recipient
         $anexos=(isset($dados['anexos']) && is_array($dados['anexos']) )?$dados['anexos']:[];
         foreach($anexos as $anexo){
+            if(!file_exists($anexo->filePath)){
+                //impedir envio caso um arquivo anexado não seja encontrado
+                throw new Exception("Arquivo: ".$anexo->fileName." Não encontrado");
+            }
              $mail->addAttachment($anexo->filePath, $anexo->fileName);  
         }
        
@@ -144,6 +148,11 @@ class Email_model extends CI_Model
 
         if (in_array(2, $tipos_anexo)) {
             //pdf
+            $pathPdf = $this->Pdf_model->getPathPdf();
+            $obj = new \stdClass();
+            $obj->filePath = $pathPdf . $filename . ".pdf";
+            $obj->fileName = $filename . ".pdf";
+            $lista[] = $obj;
         }
 
         if (in_array(3, $tipos_anexo)) {

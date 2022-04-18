@@ -78,6 +78,7 @@ class LibreConverter{
 
     public function makeCommand($sourceFile, $outputDirectory,$escapeSource=true)
     {
+        setlocale(LC_CTYPE, 'pt_BR.UTF-8'); //resolve problema de acento no escapeshell
         if (!is_writable($outputDirectory)) {
             throw new \Exception('Destino sem permissão de escrita');
         }

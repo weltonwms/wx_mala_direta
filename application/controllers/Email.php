@@ -12,6 +12,7 @@ class Email extends BaseController
         $this->load->model('Lista_model');
         $this->load->model('Modelo_model');
         $this->load->model('MalaDireta_model');
+        $this->load->model('Pdf_model');
     }
 
     public function index()
