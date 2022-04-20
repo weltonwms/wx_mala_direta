@@ -1,4 +1,4 @@
-<h4 class="mt-2">LISTA <small class="text-muted">- Tabela com Dados Utilizados pelo Sistema</small></h4>
+<h5 class="mt-4 mb-4">LISTA <small class="text-muted">- Tabela com Dados Utilizados pelo Sistema</small></h5>
 
 <form action="<?php echo base_url('lista/loadList') ?>" method="post" enctype="multipart/form-data">
     <div class="row">

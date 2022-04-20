@@ -1,5 +1,5 @@
-<h4 class="mt-2">PDF <small class="text-muted">- Conversão de Documentos da Mala Direta para PDF</small>
-</h4>
+<h5 class="mt-4 mb-4">PDF <small class="text-muted">- Conversão de Documentos da Mala Direta para PDF</small>
+</h5>
 
 
 <div class="row">

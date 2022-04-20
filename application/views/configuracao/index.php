@@ -1,6 +1,6 @@
-<h4 class="mt-2">
+<h5 class="mt-4 mb-4">
     Configurações <small class="text-muted">- Informações Gerais Utilizadas pelo Sistema</small>
-</h4>
+</h5>
 <?php
 $headCampos=isset($head_lista->campos)?$head_lista->campos:[];
 $campo_identificador=isset($head_lista->campo_identificador)?$head_lista->campo_identificador:'';

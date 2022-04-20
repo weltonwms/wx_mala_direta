@@ -1,5 +1,5 @@
-<h4 class="mt-2">Mala Direta <small class="text-muted">- Criação de Documentos Baseados na Lista e no Modelo</small>
-</h4>
+<h5 class="mt-4 mb-4">Mala Direta <small class="text-muted">- Criação de Documentos Baseados na Lista e no Modelo</small>
+</h5>
 
 
 <div class="row">
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<br><br>
+<div class="message_global mt-3"></div>
 <?php if($files):?>
 <form action="" method="POST">
     <div class="card">

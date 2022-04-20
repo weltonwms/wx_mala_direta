@@ -1,6 +1,6 @@
-<h4 class="mt-2">
+<h5 class="mt-4 mb-5">
     Email <small class="text-muted">- Disparo de Email baseado na Lista e Documentos Gerados</small>
-</h4>
+</h5>
 
 <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstrucoes"
     aria-expanded="false" aria-controls="collapseInstrucoes">

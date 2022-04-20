@@ -1,6 +1,6 @@
-<h4 class="mt-2">MODELO <small class="text-muted">- Documento que servirá de base para criar outros documentos</small>
-</h4>
-
+<h5 class="mt-4 mb-4">MODELO <small class="text-muted">- Documento que servirá de base para criar outros documentos</small>
+</h5>
+<br>
 <form action="<?php echo base_url('modelo/loadModelo') ?>" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-4">
@@ -25,6 +25,7 @@
         </div>
     </div>
 
+    <br>
     <div class="row">
         <div class="col-md-12">
             <div class="collapse" id="collapseInstrucoes">
