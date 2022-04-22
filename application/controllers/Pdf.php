@@ -7,6 +7,10 @@ class Pdf extends BaseController {
 	public function __construct()
     {
         parent::__construct();
+		if(!$this->session->userdata('logado')){
+            redirect("login");
+        }
+		$this->load->model('User_model');
 		$this->load->model('Pdf_model');
         $this->load->model('User_model');
 	}

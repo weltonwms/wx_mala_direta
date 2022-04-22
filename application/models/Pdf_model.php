@@ -5,27 +5,30 @@ class Pdf_model extends CI_Model
 {
     public function getPathPdf()
     {
-        $this->load->model('User_model');
-        $pathUser = $this->User_model->getPathUser();
-        $pathPdf = $pathUser . "pdf/";
-        return $pathPdf;
+        $pathUser=$this->User_model->getPathUser();
+        return $pathUser."pdf/";        
     }
+
     public function getFilesToConvert()
     {
         $this->load->model("MalaDireta_model");
         $pathMalaDireta = $this->MalaDireta_model->getPathMalaDireta();
-
-        $scanned_directory = array_diff(scandir($pathMalaDireta), array('..', '.'));
-        //cuidado que não foi feito filtro para arquivo. pode haver diretório.
-        return array_values($scanned_directory);
+        if(file_exists($pathMalaDireta)){
+            $scanned_directory = array_diff(scandir($pathMalaDireta), array('..', '.'));
+            //cuidado que não foi feito filtro para arquivo. pode haver diretório.
+            return array_values($scanned_directory);
+        }
+       
     }
 
     public function convertFile($filename)
     {
-        $this->load->model('User_model');
         $pathUser = $this->User_model->getPathUser();
         $pathPdf = $pathUser . "pdf";
         $pathMalaDireta = $pathUser . "malaDireta";
+        if (!file_exists($pathPdf)) {
+            mkdir($pathPdf, 0777, true);
+        }
 
         $this->load->library("LibreConverter");
         $converter = new LibreConverter([
@@ -52,7 +55,6 @@ class Pdf_model extends CI_Model
 
     public function getFilesNotConverted()
     {
-        $this->load->model('User_model');
         $pathUser = $this->User_model->getPathUser();
         $pathPdf = $pathUser . "pdf";
         $pathMalaDireta = $pathUser . "malaDireta";
@@ -68,9 +70,7 @@ class Pdf_model extends CI_Model
 
     public function getFilesFromPdf()
     {
-        $this->load->model('User_model');
-        $pathUser = $this->User_model->getPathUser();
-        $pathPdf = $pathUser . "pdf";
+         $pathPdf = $this->getPathPdf();
          if (!file_exists($pathPdf)) {
             return [];
         }

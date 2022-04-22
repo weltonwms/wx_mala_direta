@@ -8,6 +8,10 @@ class MalaDireta extends BaseController
     public function __construct()
     {
         parent::__construct();
+        if(!$this->session->userdata('logado')){
+            redirect("login");
+        }
+        $this->load->model('User_model');
         $this->load->model('Lista_model');
         $this->load->model('Modelo_model');
         $this->load->model('MalaDireta_model');

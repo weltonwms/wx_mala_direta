@@ -5,7 +5,7 @@ class Configuracao_model extends CI_Model
 {
     public function updateConfiguracoes($post)
     {
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $this->db->where('user_id', $user_id);
         $registro = $this->db->get('configuracoes')->row();
         $dados = [
@@ -30,7 +30,7 @@ class Configuracao_model extends CI_Model
 
     public function getConfiguracoes()
     {
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $this->db->where('user_id',$user_id);
         $configuracoes=$this->db->get('configuracoes')->row();
         return $configuracoes;

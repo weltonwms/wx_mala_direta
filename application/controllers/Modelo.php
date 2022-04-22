@@ -7,7 +7,11 @@ class Modelo extends BaseController
     public function __construct()
     {
         parent::__construct();
+        if(!$this->session->userdata('logado')){
+            redirect("login");
+        }
         $this->load->model('Modelo_model');
+        $this->load->model('User_model');
     }
 
     public function index()
@@ -21,7 +25,7 @@ class Modelo extends BaseController
     public function loadModelo()
     {
         //path= uploads/user{user_id}_{secret_user}/modelo/modelo.docx|odt
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $path= $this->Modelo_model->getPathModelo();
 		$this->do_upload($path, $user_id);
         redirect('modelo');

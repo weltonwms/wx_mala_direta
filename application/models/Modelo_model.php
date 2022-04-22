@@ -24,7 +24,7 @@ class Modelo_model extends CI_Model
 
     public function getCarregamentoModelo()
     {
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $this->db->where('user_id',$user_id);
         $carregamento=$this->db->get('carregamentos_modelo')->row();
         if($carregamento):
@@ -35,10 +35,8 @@ class Modelo_model extends CI_Model
 
     public function getPathModelo()
     {
-        $user_id=1;
-        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
-        $pathMalaDireta="./uploads/user{$user_id}_{$secret_user}/modelo/";
-        return $pathMalaDireta;
+        $pathUser=$this->User_model->getPathUser();
+        return $pathUser."modelo/";      
     }
 
     

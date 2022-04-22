@@ -9,7 +9,6 @@ class MalaDireta_model extends CI_Model
     public function execute($carregamentoLista, $carregamentoModelo)
     {
         $user_id=$carregamentoModelo->user_id;
-        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
         $fileModelo=$carregamentoModelo->filename;
         $extFile=UtilHelper::getExtensionFile($fileModelo);
         $campo_identificador=$carregamentoLista['campo_identificador']; //obrigatório
@@ -26,8 +25,9 @@ class MalaDireta_model extends CI_Model
             return false;
         }
 
-        $pathModelo="./uploads/user{$user_id}_{$secret_user}/modelo/";
-        $pathMalaDireta="./uploads/user{$user_id}_{$secret_user}/malaDireta/";
+        $pathUser=$this->User_model->getPathUser();
+        $pathModelo=$pathUser."modelo/";
+        $pathMalaDireta=$this->getPathMalaDireta();
 
         if (!file_exists($pathMalaDireta)) {
             mkdir($pathMalaDireta, 0777, true);
@@ -52,10 +52,8 @@ class MalaDireta_model extends CI_Model
 
     public function getPathMalaDireta()
     {
-        $user_id=1;
-        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
-        $pathMalaDireta="./uploads/user{$user_id}_{$secret_user}/malaDireta/";
-        return $pathMalaDireta;
+        $pathUser=$this->User_model->getPathUser();
+        return $pathUser."malaDireta/";            
     }
 
     public function getFilesFromMalaDireta()

@@ -157,7 +157,7 @@ class Email_model extends CI_Model
 
         if (in_array(3, $tipos_anexo)) {
             //upload_now_file uploads realizados no momento do disparo de emails
-            $pathUser = $this->Email_model->getPathUser();
+            $pathUser = $this->User_model->getPathUser();
             $pathTmp = $pathUser."tmp/";
             foreach ($upload_now_file as $name) {
                 $obj = new \stdClass();
@@ -171,17 +171,10 @@ class Email_model extends CI_Model
     }
 
 
-    public function getPathUser()
-    {
-        $user_id=1;
-        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
-        $pathUser="./uploads/user{$user_id}_{$secret_user}/";
-        return $pathUser;
-    }
 
     public function saveLogSendMail($dados)
     {
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $this->db->where('user_id', $user_id);
         $registro = $this->db->get('emails_enviados')->row();
         //TO DO :sanitizar entrada $dados;
@@ -200,7 +193,7 @@ class Email_model extends CI_Model
 
     public function clearTmpFiles(array $filesTmp)
     {
-        $pathUser = $this->getPathUser();
+        $pathUser = $this->User_model->getPathUser();
         $pathTmp = $pathUser."tmp/";
         foreach ($filesTmp as $file) {
             $fileFullPath= $pathTmp . $file;

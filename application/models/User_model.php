@@ -5,8 +5,8 @@ class User_model extends CI_Model
 {
     public function getPathUser()
     {
-        $user_id=1;
-        $secret_user="1b7b5358"; //pegar da table users quando tiver ou session
+        $user_id=$this->session->userdata('user_id');
+        $secret_user=$this->session->userdata('user_secret');
         $pathUser="./uploads/user{$user_id}_{$secret_user}/";
         return $pathUser;
     }

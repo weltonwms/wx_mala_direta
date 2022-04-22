@@ -34,7 +34,7 @@ class Lista_model extends CI_Model
 
     public function executeList($fileCsv)
     {
-        $user_id = 1;
+        $user_id=$this->session->userdata('user_id');
         $cabecalho = UtilHelper::getCabecalhoCsv($fileCsv);
         $nameTable = "user" . $user_id . '_lista_dados';
 
@@ -118,7 +118,7 @@ class Lista_model extends CI_Model
 
     public function getHeadCarregamentoLista()
     {
-        $user_id=1;
+        $user_id=$this->session->userdata('user_id');
         $this->db->where('user_id',$user_id);
         $carregamento=$this->db->get('carregamentos_lista')->row();
         if($carregamento){

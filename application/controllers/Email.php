@@ -7,6 +7,10 @@ class Email extends BaseController
     public function __construct()
     {
         parent::__construct();
+        if(!$this->session->userdata('logado')){
+            redirect("login");
+        }
+        $this->load->model('User_model');
         $this->load->model('Email_model');
         $this->load->model("Configuracao_model");
         $this->load->model('Lista_model');
@@ -94,7 +98,7 @@ class Email extends BaseController
 
     private function uploadNowFile()
     {
-        $pathUser = $this->Email_model->getPathUser();
+        $pathUser = $this->User_model->getPathUser();
         $path = $pathUser . "tmp/";
         $dados=[
             "path"=>$path,

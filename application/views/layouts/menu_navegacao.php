@@ -9,7 +9,7 @@ function activeClass($str){
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar_wx">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="<?php echo base_url('home') ?>">
             <img src="<?php echo base_url("assets/img/logo.png")?>" alt="" class="d-inline-block align-text-top">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -21,7 +21,8 @@ function activeClass($str){
 
 
                 <li class="nav-item">
-                    <a class="nav-link <?php echo activeClass('home') ?>" aria-current="page" href="#">Home</a>
+                    <a class="nav-link <?php echo activeClass('home') ?>" 
+                     href="<?php echo base_url('home') ?>">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo activeClass('lista') ?>"
@@ -51,14 +52,18 @@ function activeClass($str){
             </ul>
 
 
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-2">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Usuário X
+                        <?php echo $this->session->userdata('username')?>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item " href="#">Logout</a></li>
+                        <li>
+                            <a class="dropdown-item " href="<?php echo base_url("login/deslogar")?>">
+                                Logout
+                            </a>
+                        </li>
                        
                     </ul>
                 </li>

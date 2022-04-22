@@ -11,17 +11,23 @@
                     LOG IN
                 </h5>
                 <div class="card-body">
-
-                    <form>
+                <?php if ($this->session->flashdata('msg_error')): ?>
+                    <div class="alert alert-danger">
+                       <?php echo $this->session->flashdata('msg_error')?>
+                    </div>
+                <?php endif;?>
+                    
+                    <form method="POST" action="<?php echo base_url("login/postLogin")?>"> 
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Usuário</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp">
+                            <label for="username" class="form-label">Usuário</label>
+                            <input type="text" class="form-control"
+                             id="username" name="username" >
                            
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control" 
+                            id="password" name="password">
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
