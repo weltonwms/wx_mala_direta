@@ -87,7 +87,7 @@ class Email extends BaseController
             "tipos_anexo" => isset($dados['tipos_anexo']) ? $dados['tipos_anexo'] : [],
             "lista" => $dados['dados'],
             "upload_now_file" => $infoUpload ? $infoUpload->files : [],
-            "ext" => $carregamentoModelo->ext,
+            "ext" => isset($carregamentoModelo->ext)?$carregamentoModelo->ext:'',
 
         ];
         header('Content-Type: application/json; charset=utf-8');

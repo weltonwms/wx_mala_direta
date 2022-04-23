@@ -1,12 +1,25 @@
 ::selection { background-color: #009688; color: white; }
 
+.table>:not(:first-child) {
+    border-top: 2px solid #ccc;
+}
+
 .font-sm{
     font-size: 11px;
+}
+
+.text-success{
+    color: #009688 !important;
 }
 
 .width-lg{
     width: 100%;
 }
+@media (max-width: 575.98px) {
+    .width-lg-sm{
+        width: 100%;
+    }
+ }
 
 legend.legend_destaque{
     border-bottom: 1px solid #ddd;

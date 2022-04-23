@@ -62,7 +62,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1 text-info d-block d-sm-none">Barra de Ferramentas</span>
+            <span class="navbar-brand mb-0 h1 text-success d-block d-sm-none">Barra de Ferramentas</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarBarraFerramentas" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -72,15 +72,17 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item ">
-                        <a class="btn btn-outline-success me-2 btn-sm " href="<?php echo base_url('Lista/create')?>">
+                        <a class="btn btn-outline-success me-2 btn-sm mb-2 width-lg-sm"
+                            href="<?php echo base_url('Lista/create')?>">
                             <i class="fa fa-plus-circle"></i>
                             Novo</a>
 
 
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary me-2 btn-sm requireChecks" type="button"
-                            data-url="<?php echo base_url('Lista/editItem/wx_id')?>" onclick="editItemLista(this)">
+                        <button class="btn btn-outline-secondary me-2 btn-sm mb-2 width-lg-sm requireChecks"
+                            type="button" data-url="<?php echo base_url('Lista/editItem/wx_id')?>"
+                            onclick="editItemLista(this)">
                             <i class="fa fa-pencil"></i>
                             Editar</button>
                     </li>
@@ -88,21 +90,21 @@
 
 
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary me-2 btn-sm requireChecks" type="submit"
-                            formaction="<?php echo base_url('Lista/ativar')?>">
+                        <button class="btn btn-outline-secondary me-2 btn-sm mb-2 width-lg-sm requireChecks"
+                            type="submit" formaction="<?php echo base_url('Lista/ativar')?>">
                             <i class="fa fa-check text-success"></i>
                             Ativar</button>
                     </li>
 
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary me-2 btn-sm requireChecks" type="submit"
-                            formaction="<?php echo base_url('Lista/inativar')?>">
+                        <button class="btn btn-outline-secondary me-2 btn-sm mb-2 width-lg-sm requireChecks"
+                            type="submit" formaction="<?php echo base_url('Lista/inativar')?>">
                             <i class="fa-solid fa-circle-xmark text-danger"></i>
                             Inativar</button>
                     </li>
 
                     <li class="nav-item">
-                        <button class="btn btn-outline-danger me-2 btn-sm requireChecks" type="submit"
+                        <button class="btn btn-outline-danger me-2 btn-sm mb-2 width-lg-sm requireChecks" type="submit"
                             formaction="<?php echo base_url('Lista/excluir')?>">
                             <i class="fa fa-trash"></i>
                             Excluir</button>
@@ -127,12 +129,13 @@
     <div class="table-responsive">
         <table class="table table-sm font-sm table-bordered table-hover">
             <thead>
-                <th><input type="checkbox" class='checkAll'></th>
+                <tr>
+                    <th><input type="checkbox" class='checkAll'></th>
 
-                <?php foreach ($carregamentoLista['campos'] as $campo): ?>
-                <th><?php echo $campo ?></th>
-                <?php endforeach;?>
-                <th>Status</th>
+                    <?php foreach ($carregamentoLista['campos'] as $campo): ?>
+                        <th><?php echo $campo ?></th>
+                    <?php endforeach;?>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -169,7 +172,6 @@
 <?php endif;?>
 
 <script>
-
 checkAndUncheck(); //função para selecionar todos os registros e deselecionar
 
 function editItemLista(alvo) {

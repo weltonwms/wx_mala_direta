@@ -29,6 +29,6 @@
 
 
 
-    <button type="submit" class="btn btn-primary">Salvar</button>
+    <button type="submit" class="btn btn-success">Salvar</button>
     <a href="<?php echo base_url('lista')?>" class="btn btn-secondary">Voltar</a>
 </form>

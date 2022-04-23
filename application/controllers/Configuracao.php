@@ -11,12 +11,12 @@ class Configuracao extends BaseController {
             redirect("login");
         }
 		$this->load->model('User_model');
+		$this->load->model('Lista_model');
         $this->load->model('Configuracao_model');
 	}
 	
 	public function index()
 	{
-		$this->load->model('Lista_model');
 		$dados=[
 			"config"=>$this->Configuracao_model->getConfiguracoes(),
 			"head_lista"=>$this->Lista_model->getHeadCarregamentoLista()
@@ -38,21 +38,24 @@ class Configuracao extends BaseController {
         }
         $this->session->set_flashdata('status','danger');
             $this->session->set_flashdata('msg_confirm',"Erro ao Salvar Configuração");
-            redirect('configuração');
+            redirect('configuracao');
             return false;
 	}
 
-	public function ajaxTeste(){
-		echo json_encode(['name'=>'Welton Moreira','POST'=>$_POST,'GET'=>$_GET]);
-		exit();
-	}
-	public function ajaxTesteMail(){
-		echo json_encode(['name'=>$_POST]);
-		echo json_encode(['name'=>$_GET]);
-		//print_r($this->input->get()); exit();
-		//echo json_encode($this->input->get());
-		//echo json_encode(['name'=>'Welton Moreira']);
-		exit();
+	
+
+	public function autoDestroy(){
+		$retorno=$this->User_model->autoDestroy();
+		if($retorno){
+            $this->session->set_flashdata('status','success');
+            $this->session->set_flashdata('msg_confirm',"Arquivos e Registros Apagados com Sucesso"); 
+            redirect('configuracao');
+            return true;
+        }
+        $this->session->set_flashdata('status','danger');
+            $this->session->set_flashdata('msg_confirm',"Erro ao Apagar Arquivos e Registros");
+            redirect('configuracao');
+            return false;
 	}
 
 	

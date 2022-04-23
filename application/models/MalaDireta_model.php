@@ -8,16 +8,18 @@ class MalaDireta_model extends CI_Model
 {
     public function execute($carregamentoLista, $carregamentoModelo)
     {
-        $user_id=$carregamentoModelo->user_id;
-        $fileModelo=$carregamentoModelo->filename;
-        $extFile=UtilHelper::getExtensionFile($fileModelo);
-        $campo_identificador=$carregamentoLista['campo_identificador']; //obrigatório
-
         if (!$carregamentoLista || !$carregamentoModelo) {
             $this->session->set_flashdata('status', 'danger');
             $this->session->set_flashdata('msg_confirm', "A Lista e o Modelo precisam estar carregados!!");
             return false;
         }
+        
+        $user_id=$carregamentoModelo->user_id;
+        $fileModelo=$carregamentoModelo->filename;
+        $extFile=UtilHelper::getExtensionFile($fileModelo);
+        $campo_identificador=$carregamentoLista['campo_identificador']; //obrigatório
+
+        
 
         if (!$campo_identificador) {
             $this->session->set_flashdata('status', 'danger');

@@ -47,6 +47,12 @@ function activeClass($str){
                     <a class="nav-link <?php echo activeClass('configuracao') ?>"
                         href="<?php echo base_url('configuracao') ?>">Configurações</a>
                 </li>
+                <?php if($this->session->userdata('user_perfil')==1):?>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo activeClass('user') ?>"
+                        href="<?php echo base_url('user') ?>">Usuários</a>
+                </li>
+                <?php endif;?>
 
 
             </ul>

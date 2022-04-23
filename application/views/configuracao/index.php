@@ -55,6 +55,23 @@ $campo_email=isset($head_lista->campo_email)?$head_lista->campo_email:'';
 
 
             </fieldset>
+
+            <fieldset class="mt-4">
+               <legend class="legend_destaque text-muted">Segurança</legend>
+               <div class="row-fluid">
+               <div class="form-text">
+                   Após utilizar as funcionalidades, pode-se apagar todos os arquivos gerados e configurações
+                   realizadas, como medida de segurança para não deixar arquivos pessoais no servidor.
+                </div>
+                <br>
+                   <a href="<?php echo base_url("configuracao/autoDestroy")?>" class="btn btn-danger">
+                       Remover Arquivos e Registros
+                    </a>
+                   <br>
+               </div>
+           </fieldset>
+
+
         </div>
         <div class="col-md-6">
             <fieldset>
@@ -120,6 +137,7 @@ $campo_email=isset($head_lista->campo_email)?$head_lista->campo_email:'';
         </div>
     </div>
 
+    
 </form>
 
 
