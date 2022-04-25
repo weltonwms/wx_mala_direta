@@ -88,7 +88,10 @@
     <div class="row mb-2">
         <div class="col-md-4">
             <div class="">
-                <label class="form-label">Anexos</label>
+                <label class="form-label" data-bs-toggle="tooltip"
+                title="Segure Ctrl para selecionar mais de um">
+                Anexos
+                </label>
                 <select class="form-select" name="tipos_anexo[]" id="tipos_anexo" multiple>
 
                     <option value="1">Doc Gerado Mala direta</option>
@@ -98,7 +101,10 @@
             </div>
         </div>
         <div class="col-md-8 arquivos_upload_now" style="display:none">
-            <label for="upload_now_file" class="form-label">Arquivos Upload Agora</label>
+            <label for="upload_now_file" data-bs-toggle="tooltip"
+            title="Segure Ctrl na seleção de arquivos para escolher mais de um"
+            class="form-label">
+            Arquivos Upload Agora</label>
             <input name="upload_now_file[]" class="form-control form-control-sm" id="upload_now_file" type="file"
                 multiple>
         </div>
