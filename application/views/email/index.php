@@ -119,7 +119,7 @@
         <div id="" class="form-text">Pode-se Usar Marcações HTML.</div>
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary" id="executar_envio">Executar Envio</button>
+        <button type="submit" class="btn btn-success" id="executar_envio">Executar Envio</button>
     </div>
 
 </form>
